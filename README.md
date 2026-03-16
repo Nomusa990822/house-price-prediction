@@ -1,6 +1,6 @@
-🏠 House Price Prediction — Machine Learning Project
+## 🏠 House Price Prediction — Machine Learning Project
 
-📌 Overview
+**Overview**
 
 This project predicts residential house prices using machine learning techniques applied to the Ames Housing dataset from the Kaggle competition House Prices: Advanced Regression Techniques.
 
@@ -8,7 +8,7 @@ The goal is to build a predictive model that estimates the SalePrice of a house 
 
 ---
 
-📊 Dataset
+## 📊 Dataset
 
 The dataset comes from the Kaggle competition:
 
@@ -32,7 +32,7 @@ SalePrice — the final sale price of the house.
 
 ---
 
-🧠 Project Workflow
+## 🧠 Project Workflow
 
 The project follows a typical machine learning pipeline:
 
@@ -47,7 +47,7 @@ The project follows a typical machine learning pipeline:
 
 ---
 
-⚙️ Technologies Used
+## ⚙️ Technologies Used
 
 Python
 Pandas
@@ -61,7 +61,7 @@ Jupyter Notebook
 
 ---
 
-🧪 Machine Learning Models
+## 🧪 Machine Learning Models
 
 Several regression models were explored:
 
@@ -75,7 +75,7 @@ The final solution uses an ensemble approach combining multiple models to improv
 
 ---
 
-📈 Evaluation Metric
+## 📈 Evaluation Metric
 
 The competition evaluates models using:
 
@@ -85,7 +85,7 @@ Lower RMSLE values indicate better prediction accuracy.
 
 ---
 
-🏗 Feature Engineering
+## 🏗 Feature Engineering
 
 To improve model performance, additional features were created such as:
 
@@ -99,7 +99,7 @@ These features capture important information about property value.
 
 ---
 
-📂 Project Structure
+## 📂 Project Structure
 
 house-price-prediction/
 
@@ -117,27 +117,27 @@ LICENSE
 
 ---
 
-🚀 How to Run the Project
+## 🚀 How to Run the Project
 
-Clone the repository
+**Clone the repository**
 
 git clone https://github.com/Nomusa990822/house-price-prediction.git
 
-Install dependencies
+**Install dependencies**
 
 pip install -r requirements.txt
 
-Run the model training script
+**Run the model training script**
 
 python train_model.py
 
 ---
 
-📊 Results
+## 📊 Results
 
 The model successfully predicts house prices using advanced regression techniques and feature engineering.
 
-Further improvements could include:
+**Further improvements could include:**
 
 - Hyperparameter tuning
 - Advanced model stacking
@@ -145,7 +145,7 @@ Further improvements could include:
 
 ---
 
-📎 Kaggle Competition
+## 📎 Kaggle Competition
 
 Dataset and competition details are available on Kaggle.
 
@@ -153,15 +153,14 @@ House Prices: Advanced Regression Techniques
 
 ---
 
-👤 Author
+## 👤 Author
 
 Nomusa Shongwe
-Data Analytics & Machine Learning Enthusiast
 
 GitHub: https://github.com/Nomusa990822
 
 ---
 
-📄 License
+## 📄 License
 
 This project is licensed under the MIT License.
