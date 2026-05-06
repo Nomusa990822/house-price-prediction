@@ -27,25 +27,47 @@ End-to-End Machine Learning Pipeline for the Kaggle Ames Housing Competition
 
 ---
 
-## Problem Statement
+## Overview
 
-The goal of this project is to predict residential house prices using the Ames Housing dataset from Kaggle.
+This project implements a complete machine learning pipeline for predicting residential housing prices using the Ames Housing dataset. The workflow covers data exploration, feature engineering, model development, evaluation, and final ensemble blending.
 
-This is a structured regression problem involving:
-- Heterogeneous features
-- Missing values
-- Non-linear relationships
-- Skewed target distribution
+The objective is to minimize Root Mean Squared Logarithmic Error (RMSLE), aligning with the Kaggle competition evaluation metric.
 
 ---
 
-## Objective
+## Project Structure
 
-Minimize **Root Mean Squared Log Error (RMSLE)**:
-
-- Penalizes underestimation more heavily
-- Rewards proportional accuracy
-- Requires log-transformed modeling strategy
+```text
+house-price-prediction/
+│
+├── notebooks/
+│   ├── 01_eda.ipynb
+│   ├── 02_feature_engineering.ipynb
+│   └── 03_modeling.ipynb
+│
+├── outputs/
+│   ├── submission.csv
+│   │
+│   ├── modeling_outputs/
+│   │   ├── model_cv_results.csv
+│   │   ├── individual_model_predictions.csv
+│   │   └── blend_weights.csv
+│   │
+│   └── catboost_info/
+│       ├── learn_error.tsv
+│       └── time_left.tsv
+│
+├── reports/
+│   ├── feature_engineering.md
+│   ├── model_summary.md
+│   └── leaderboard_results.md
+│
+├── images/
+├── README.md
+├── requirements.txt
+├── .gitignore
+└── LICENSE
+```
 
 ---
 
@@ -66,51 +88,77 @@ flowchart LR
 
 ---
 
-## Dataset
+## Methodology
 
-Source: Kaggle House Prices Competition
-Training samples: 1460
-Test samples: 1459
-Features: 275 engineered features
+**1. Data Preparation**
 
----
+- Missing values handled using domain-aware strategies
+- Outliers analyzed and treated where necessary
+- Categorical variables encoded appropriately
+- Numerical features transformed for stability
 
-## Key Techniques
+Target transformation:
 
-**Feature Engineering**
+```Plain text
+y = log(SalePrice)
+```
 
-- Log transformation of target variable
-- Missing value imputation
-- Ordinal encoding for categorical features
-- Skewness correction
-- Feature scaling using RobustScaler
-- Interaction features (area, quality, age)
+Predictions converted back using:
 
-**Modeling**
+```Plain text
+SalePrice = exp(predictions)
+```
 
-- Linear Models:
-  * Ridge
-  * Lasso
-  * ElasticNet
-  * Bayesian Ridge
-- Tree-Based Models:
-  * Random Forest
-  * Gradient Boosting
-  * Extra Trees
-  * HistGradientBoosting
-- Boosting Models:
-  * XGBoost
-  * LightGBM
-  * CatBoost
+**2. Feature Engineering**
 
-**Evaluation**
+Key transformations include:
+- Interaction features between important variables
+- Polynomial expansions for non-linear relationships
+- Aggregated neighborhood-based statistics
+- Log transformations for skewed distributions
 
-- Metric: Root Mean Squared Log Error (RMSLE)
-- Strategy: 5-Fold Cross-Validation
+The focus was on improving signal quality rather than increasing feature count.
+
+**3. Model Development**
+
+The following models were evaluated:
+
+**Linear Models**
+- Ridge
+- Lasso
+- ElasticNet
+- Bayesian Ridge
+
+**Tree-Based Models**
+- Random Forest
+- Gradient Boosting
+- Boosting Models
+- XGBoost
+- LightGBM
+- CatBoost
+
+Linear models were scaled using RobustScaler. Tree-based models were used without scaling.
+
+**4. Evaluation Strategy**
+
+All models were evaluated using 5-Fold Cross Validation.
+
+Metric used:
+```Plain text
+RMSE on log-transformed SalePrice
+```
+
+This ensures alignment with the Kaggle RMSLE objective.
 
 ---
 
 ## Model Performance
+
+Cross-validation results are stored in:
+
+```Plain text
+outputs/modeling_outputs/model_cv_results.csv
+```
 
 **Baseline Models**
 
@@ -132,49 +180,81 @@ Features: 275 engineered features
 |Tuned ElasticNet|0.12617|
 |Tuned XGBoost|0.12656|
 
----
-
-## Final Model Strategy
-
-The final prediction is generated using:
-- Model selection from top-performing tuned models
-- Weighted blending using inverse RMSE
-- Prediction clipping to ensure valid outputs
+**Observations**
+- Boosting models capture complex nonlinear relationships effectively
+- Regularized linear models remain competitive due to strong feature engineering
+- Model diversity enables effective ensemble construction
 
 ---
 
-## Final Result
+## Model Blending
 
+Final predictions are generated using inverse-RMSE weighted averaging.
+
+**Weighting Formula**
+
+```Plain text
+weight = 1 / RMSE
 ```
-Public Leaderboard Score: 0.12193 RMSLE
+
+Normalized weights:
+
+```Plain text
+weight = weight / sum(weights)
 ```
+
+Blend weights are stored in:
+
+```Plain text
+outputs/modeling_outputs/blend_weights.csv
+```
+
+**Rationale**
+
+- Stronger models contribute more to the final prediction
+- Weak models are automatically down-weighted
+- Reduces variance and improves generalization
 
 ---
 
-## Repository Structure
+## Prediction Analysis
 
+Individual model predictions are available in:
+
+```Plain text
+outputs/modeling_outputs/individual_model_predictions.csv
 ```
-house-price-prediction/
-│
-├── notebooks/
-│   ├── 01_eda.ipynb
-│   ├── 02_feature_engineering.ipynb
-│   └── 03_modeling_and_optimisation.ipynb
-│
-├── reports/
-│   ├── model_summary.md
-│   ├── feature_engineering.md
-│   └── leaderboard_results.md
-│
-├── outputs/
-│   ├── submission.csv
-│   └── model_cv_results.csv
-│
-├── images/
-│
-├── requirements.txt
-└── README.md
+
+Key observations:
+- Boosting models show tighter prediction distributions
+- Linear models provide stability
+- Ensemble reduces extreme prediction variance
+
+---
+
+## Final Submission
+
+Submission file:
+
+```Plain text
+outputs/submission.csv
 ```
+
+**Format**
+
+|**Id**|**SalePrice**|
+|------|-------------|
+
+
+**Kaggle Result**
+
+Public Leaderboard Score:
+
+```Plain text
+0.12193 RMSLE
+```
+
+This score reflects strong generalization and effective ensemble modeling.
 
 ---
 
@@ -194,10 +274,26 @@ pip install -r requirements.txt
 Run notebooks in order:
 
 ```
-01_eda.ipynb
-02_feature_engineering.ipynb
-03_modeling_and_optimisation.ipynb
+01_eda → 02_feature_engineering → 03_modeling
 ```
+
+---
+
+## Key Insights
+
+- Feature engineering is the primary driver of performance
+- Ensemble learning outperforms individual models
+- Model diversity is more valuable than model complexity
+- Proper validation prevents overfitting
+
+---
+
+## What This Project Demonstrates
+- End-to-end machine learning pipeline design
+- Strong feature engineering techniques
+- Robust validation strategModel comparison and optimization
+- Ensemble learning and blending
+- Reproducible data science workflow
 
 ---
 
@@ -210,5 +306,5 @@ Run notebooks in order:
 
 ---
 
-## Author
-Nomusa Shongwe
+## License
+This project is licensed under the MIT License.
