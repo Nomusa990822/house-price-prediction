@@ -39,6 +39,16 @@ This is a structured regression problem involving:
 
 ---
 
+## Objective
+
+Minimize **Root Mean Squared Log Error (RMSLE)**:
+
+- Penalizes underestimation more heavily
+- Rewards proportional accuracy
+- Requires log-transformed modeling strategy
+
+---
+
 ## Project Overview
 
 This project follows a complete machine learning pipeline:
