@@ -1,0 +1,6 @@
+model,weight
+Tuned_CatBoost,0.20454480107612288
+Tuned_GradientBoosting,0.20287293330827164
+Tuned_Lasso,0.1982923206229068
+Tuned_ElasticNet,0.1977575759237623
+Tuned_XGBoost,0.19653236906893645
